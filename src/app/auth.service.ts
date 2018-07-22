@@ -66,6 +66,7 @@ import { VariableAst } from '../../node_modules/@angular/compiler';
         //this.router.navigate(['home/']);
         this.userId=value.user.uid;
         console.log('Logged In!' + this.userId);
+       this.router.navigate(["home"]);
       })
       .catch(err => {
         console.log('Something went wrong while trying to login:',err.message);
