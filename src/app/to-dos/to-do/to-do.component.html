@@ -1,0 +1,39 @@
+<form #toDoForm="ngForm" (ngSubmit)="OnSubmit(toDoForm)">
+
+  <input type="hidden" name="$key" #$key="ngModel" [(ngModel)]="toDoService.selectedToDo.$key">
+  <input type="hidden" name="state" #state="ngModel" [(ngModel)]="toDoService.selectedToDo.state">
+
+  <!-- Input Fields -->
+  <div class="form-group">
+    <label >Title</label>
+    <div class="input-group">
+      <div class="input-group-addon">
+         <!--  <button class="btn btn-default" type="reset" (click)="ToggleToDoState(toDoForm)">
+              <i class="fa fa-square-o"></i>
+            </button> -->
+            <input type="checkbox" name="state" #name="ngModel" [(ngModel)]="toDoService.selectedToDo.state" value="{{toDoService.selectedToDo.state}}" (click)="ToggleToDoState(toDoForm)">
+      </div>
+      <label>&nbsp;</label>
+        <input class="form-control" name="title" #name="ngModel" [(ngModel)]="toDoService.selectedToDo.title" placeholder="Title" required>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label >Description</label>
+    <input class="form-control" name="description" #name="ngModel" [(ngModel)]="toDoService.selectedToDo.description" placeholder="Description">
+    <!-- .inputfield{
+      height:50px
+      } -->
+  </div>
+
+  <!-- Buttons -->
+  <div class="form-group">
+    <button class="btn btn-default" type="submit" [disabled]="!toDoForm.valid">Submit
+      <i class="fa fa-floppy-o"></i>
+    </button>
+    <label>&nbsp;</label>
+    <button class="btn btn-default" type="reset" (click)="ResetForm(toDoForm)">Resest
+      <i class="fa fa-repeat"></i>
+    </button>
+  </div>
+</form>

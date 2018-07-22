@@ -1,0 +1,21 @@
+
+<div class="row">
+    <div class="col-md-7">
+      <h6 class="text-center">Users List</h6><br/>
+  <table class="table table-sm table-hover">
+    <tr *ngFor="let user of usersList">
+      <td>{{user.email}}</td>
+      <td>{{user.password}}</td>
+      <td>{{user.role}}</td>
+     <!--  <td>
+        <a class="btn">
+          <i class="fa fa-pencil-square-o" (click)="OnEdit(todo)"></i>
+        </a>
+        <a class="btn">
+            <i class="fa fa-trash-o" (click)="OnDelete(todo.$key)"></i>
+          </a>
+      </td> -->
+    </tr>
+  </table>
+    </div>
+</div>
