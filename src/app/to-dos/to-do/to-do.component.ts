@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import{ToDoService} from '../Shared/to-do.service'
 import{ToastrService} from 'ngx-toastr'
 import { NgForm } from '../../../../node_modules/@angular/forms';
+import{AngularFireAuth} from 'angularfire2/auth'
 
 @Component({
   selector: 'app-to-do',
@@ -11,7 +12,16 @@ import { NgForm } from '../../../../node_modules/@angular/forms';
 })
 export class ToDoComponent implements OnInit {
 
-  constructor(private toDoService:ToDoService, private toastr:ToastrService) { }
+  constructor(private toDoService:ToDoService, private toastr:ToastrService, private authf : AngularFireAuth) { 
+    /* this.authf.authState.subscribe(user =>{
+      if(user){
+        console.log('This user Id in the todo Page: ', user.uid)
+      }
+      else{
+        console.log('No User found!')
+      }
+    }) */
+  }
 
   ngOnInit() {
     this.ResetForm();

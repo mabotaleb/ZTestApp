@@ -17,9 +17,12 @@ export class ViewUsersComponent implements OnInit {
   constructor(private usersService:UsersService,private toastr:ToastrService,private authGuard:AuthGuard) { }
 
   ngOnInit() {
-    if(this.authGuard.IsAdmin())
+    console.log('Inside View Users, IsAdmin = ',this.authGuard.IsAdmin());
+     this.authGuard.IsAdmin().then(value=>
     {
-    let misFormattedData=this.usersService.GetData();
+     // if(value==true)
+      {
+      let misFormattedData=this.usersService.GetData();
     misFormattedData.snapshotChanges().subscribe(item=>{
       this.usersList=[];
       item.forEach(element =>{
@@ -27,9 +30,11 @@ export class ViewUsersComponent implements OnInit {
         payLoad["$key"]=element.key;
         this.usersList.push(payLoad as User);
         console.log('list of users' , this.usersList)
+      
       });
     });
   }
+    }) 
   }
 
 }

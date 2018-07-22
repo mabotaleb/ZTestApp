@@ -20,7 +20,7 @@ import { VariableAst } from '../../node_modules/@angular/compiler';
 
   user: Observable<firebase.User>;
   database;
-  public userId:string;
+  
   constructor(private angularFireAuth: AngularFireAuth,private router:Router,private angularFireDatabase: AngularFireDatabase) {
     this.user = angularFireAuth.authState;
     this.database=this.angularFireDatabase.database;
@@ -45,9 +45,8 @@ import { VariableAst } from '../../node_modules/@angular/compiler';
       .auth
       .createUserWithEmailAndPassword(email, password)
       .then(value => {
-        this.userId = firebase.auth().currentUser.uid;
-
-        this.database.ref('users/'+this.userId).set({email:email,password:password}).then(value=>{
+        localStorage.setItem("UserID", firebase.auth().currentUser.uid);
+        this.database.ref('users/'+firebase.auth().currentUser.uid).set({email:email,password:password}).then(value=>{
           console.log('Adding In Database Success!', value);
         this.router.navigate(['home']);
         console.log('Navigation Success!', value);
@@ -63,9 +62,10 @@ import { VariableAst } from '../../node_modules/@angular/compiler';
       .auth
       .signInWithEmailAndPassword(email, password)
       .then(value => {
-        //this.router.navigate(['home/']);
-        this.userId=value.user.uid;
-        console.log('Logged In!' + this.userId);
+        localStorage.setItem("UserID", value.user.uid);
+        console.log('Logged In!' + value.user.uid);
+        this.sendToken(email);
+        this.router.navigate(["home"]);
       })
       .catch(err => {
         console.log('Something went wrong while trying to login:',err.message);
@@ -85,8 +85,10 @@ import { VariableAst } from '../../node_modules/@angular/compiler';
     localStorage.removeItem("LoggedInUser");
     this.angularFireAuth
     .auth
-    .signOut();
-    this.router.navigate(["login"]);
+    .signOut().then(res=>{
+      localStorage.removeItem("UserID");
+      this.router.navigate(["login"]);
+    })
   }
 
   private updateUser(authData) {
@@ -107,10 +109,17 @@ import { VariableAst } from '../../node_modules/@angular/compiler';
   }
 
   getToken() {
+    console.log('Inside Get Token: ',localStorage.getItem("LoggedInUser"));
     return localStorage.getItem("LoggedInUser")
   }
 
   isLoggednIn() {
     return this.getToken() !== null;
   }
+  GetUserID()
+  {
+    return localStorage.getItem("UserID");
+  }
 }
+
+/* AuthService.userID='aho'; */

@@ -6,16 +6,19 @@ import { AuthService } from './auth.service';
 import { AngularFireDatabase } from '../../node_modules/angularfire2/database';
 import { FirebaseAuth } from '../../node_modules/@firebase/auth-types/';
 import { AngularFireAuth } from '../../node_modules/angularfire2/auth';
+import { userInfo } from 'os';
+import {AngularFireList} from "angularfire2/database";
+import { resolve } from 'url';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(private auth: AuthService,
+  constructor(private authService: AuthService,
     private myRoute: Router,
     private firebase:AngularFireDatabase,
-  private angularFireAuth:AngularFireAuth){
+  private angularFireAuth:AngularFireAuth,){
 
   }
   canActivate(
@@ -24,9 +27,9 @@ export class AuthGuard implements CanActivate {
 
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-    if(this.auth.isLoggednIn()){
+    if(this.authService.isLoggednIn()){
       console.log("Inside Auth Guard, User is Logged In");
-      this.auth.user;
+      this.authService.user;
       return true;
 
     }else{
@@ -40,17 +43,40 @@ export class AuthGuard implements CanActivate {
 
   }
 
-  public IsAdmin()
+   public async IsAdmin()
   {
-    if(this.auth.isLoggednIn())
-    {
-      console.log('Debug Users List',this.firebase.list('users/'+this.auth.userId));
-      console.log('Debug User ID',this.auth.userId);
-      
-      return true;
-    }
-    else
-      return false;
-  }
+    /* let promise = new Promise((resolve,reject)=>{
+      setTimeout(()=> resolve("done!"),5000)
+    });
+    let result = await promise; */
 
+    /* let value:boolean =false; */
+       const ayvalue= await this.angularFireAuth.authState.subscribe(user=>{
+
+        if(user)
+        {
+          let userData;
+         this.firebase.database.ref('users/'+user.uid).on('value',function(snapshot){
+          userData=snapshot.val();
+             
+          console.log('User role',userData['role'])
+            if(userData['role']=='admin')
+             return true
+            
+          })
+               
+      }
+        else
+        {
+        console.log("No User Was Found!");
+      }
+      }); 
+
+     console.log("Hello World",ayvalue )
+  }
+ /*  public GetRole(): Promise<string>
+  {
+     
+    return Promise;
+  } */
 }

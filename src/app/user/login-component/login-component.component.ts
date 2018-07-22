@@ -18,12 +18,11 @@ export class LoginComponentComponent implements OnInit {
   }
 
   Login() {
-    const authstate = this.authService.Login(this.email, this.password);
+    this.authService.Login(this.email, this.password);
     this.email = this.password = '';    
-    this.authService.sendToken(this.email)
     //console.log(this.authService.user.)
-
-    this.router.navigate(["home"]);
+    //this.authService.sendToken(this.email);
+    //this.router.navigate(["home"]);
     //this.Logout();
   }
 
